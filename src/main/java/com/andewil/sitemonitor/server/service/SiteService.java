@@ -34,7 +34,7 @@ public class SiteService {
     }
 
     public List<SiteRecord> getAllForUser(UUID userId) {
-        String q = "select * from site where user_id=? and is_enabled=true";
+        String q = "select * from site where user_id=? and is_enabled=true order by natural_id";
         return getTemplate().query(q, new SiteRecordMapper(), userId);
     }
 
