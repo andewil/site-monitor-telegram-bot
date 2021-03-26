@@ -33,6 +33,8 @@ public class CheckerBot extends TelegramLongPollingBot {
     public static final String LIST_CHECKS = "listchecks";
     public static final String LIST_JOBS = "listjobs";
     public static final String LAST_RESULTS = "lastresults";
+    public static final String HELP = "help";
+    public static final String START = "start";
 
     @Value("${tbot.username}")
     private String tbotUserName;
@@ -104,9 +106,6 @@ public class CheckerBot extends TelegramLongPollingBot {
         String command = text.substring(1, commandEndPosition);
         log.info("{} command: '{}'", getPrefixString(message), command);
         switch (command) {
-            case "start":
-                handleCmdStart(message, user);
-                break;
             case ADD_SITE_CHECK:
                 handleCmdAddSite(message, user);
                 break;
@@ -121,6 +120,12 @@ public class CheckerBot extends TelegramLongPollingBot {
                 break;
             case LAST_RESULTS:
                 handleCmdLastResults(message, user);
+                break;
+            case HELP:
+                handleCmdHelp(message, user);
+                break;
+            case START:
+                handleCmdHelp(message, user);
                 break;
             default:
                 isKnownCommand = false;
@@ -193,6 +198,16 @@ public class CheckerBot extends TelegramLongPollingBot {
         } catch (SchedulerException e) {
             log.error("get job names failed", e);
         }
+    }
+
+    private void handleCmdHelp(Message message, UserRecord user) {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("<b>Commands</b>\n\n");
+        stringBuilder.append("<b>/listchecks</b> - list of checks\n");
+        stringBuilder.append("<b>/addcheck</b> - add a new check\n");
+        stringBuilder.append("<b>/deletecheck</b> - remove a check\n");
+        stringBuilder.append("<b>/lastresults</b> - get last check results\n");
+        sendMessageAsHTML(user.getChatId(), stringBuilder.toString());
     }
 
     private UserRecord checkUserRegistration(Message message) {
