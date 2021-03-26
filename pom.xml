@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.andewil.sitemonitor</groupId>
-	<artifactId>server</artifactId>
+	<artifactId>sitemonitor-server</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>Site Monitor Server</name>
 	<description>Site Monitor Server performs monitoring actions</description>
