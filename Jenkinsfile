@@ -58,7 +58,7 @@ pipeline {
                 branch 'master'
             }
             steps {
-                sh 'sh /var/jenkins_home/deployscripts/deploy-sitemononitor-server.sh'
+                sh 'sh /var/jenkins_home/deployscripts/deploy-sitemonitor-server.sh'
             }
         }
      }
