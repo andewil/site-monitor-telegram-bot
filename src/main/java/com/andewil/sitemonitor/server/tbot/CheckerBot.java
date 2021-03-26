@@ -122,8 +122,6 @@ public class CheckerBot extends TelegramLongPollingBot {
                 handleCmdLastResults(message, user);
                 break;
             case HELP:
-                handleCmdHelp(message, user);
-                break;
             case START:
                 handleCmdHelp(message, user);
                 break;
