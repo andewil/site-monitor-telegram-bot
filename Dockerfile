@@ -8,7 +8,7 @@ ENV TBOT_TOKEN=fill-value
 ENV JAVA_OPTS="-XX:+UseCGroupMemoryLimitForHeap -XX:MaxRAMFraction=2 -Xms128m -Xmx128m"
 ENV SERVER_PORT=16101
 
-COPY ${JAR_FILE} nex-customer-api.jar
+COPY ${JAR_FILE} sitemonitor-server.jar
 
 EXPOSE 16101/tcp
 
