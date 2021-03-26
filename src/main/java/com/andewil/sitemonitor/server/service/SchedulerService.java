@@ -45,6 +45,8 @@ public class SchedulerService {
                 .build();
 
         scheduler.scheduleJob(job, trigger);
+
+        log.info("Check added: {} (interval={}): {}", siteRecord.getId(), siteRecord.getCheckInterval(), siteRecord.getUrl());
     }
 
     public void removeSiteCheck(SiteRecord siteRecord) {

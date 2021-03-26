@@ -14,4 +14,5 @@ public class SiteRecord {
     private UUID userId;
     private boolean isEnabled = true;
     private int naturalId;
+    private String lastResult;
 }

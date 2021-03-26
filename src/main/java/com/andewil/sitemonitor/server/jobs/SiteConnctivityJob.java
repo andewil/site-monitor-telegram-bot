@@ -3,6 +3,7 @@ package com.andewil.sitemonitor.server.jobs;
 import com.andewil.sitemonitor.server.SiteConnectivityChecker;
 import com.andewil.sitemonitor.server.StateReporter;
 import com.andewil.sitemonitor.server.checkers.SiteConnectivityCheckerImpl;
+import com.andewil.sitemonitor.server.models.SiteCheckRecord;
 import com.andewil.sitemonitor.server.service.SiteService;
 import com.andewil.sitemonitor.server.tbot.CheckerBot;
 import lombok.extern.slf4j.Slf4j;
@@ -10,6 +11,7 @@ import org.quartz.*;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
+import java.time.OffsetDateTime;
 import java.util.UUID;
 
 @Slf4j
@@ -34,20 +36,26 @@ public class SiteConnctivityJob implements Job {
             stateReporter = applicationContext.getBean(StateReporter.class);
             // get state
             String prevState = siteService.getLastResult(siteId);
-            boolean prevStateBoolean = Boolean.parseBoolean(prevState);
-            boolean result;
+            String result;
             try {
                 SiteConnectivityChecker checker = new SiteConnectivityCheckerImpl();
                 result = checker.checkSite(url);
                 log.debug("{} result: {}", prefix, result);
             } catch (Exception e) {
-                result = false;
-                siteService.updateLastResult(siteId, "false");
+                result = e.getMessage();
                 log.debug("{} result: false; exception: {}", prefix, e.getMessage());
             }
+            siteService.updateLastResult(siteId, result);
 
-            if (prevStateBoolean != result) {
-                stateReporter.reportStateChanged(userId, siteId, prevState, String.valueOf(result), "State is changed");
+            SiteCheckRecord siteCheckRecord = new SiteCheckRecord();
+            siteCheckRecord.setSiteId(siteId);
+            siteCheckRecord.setCheckTime(OffsetDateTime.now());
+            siteCheckRecord.setCheckResult(result);
+            siteService.addCheckResult(siteCheckRecord);
+
+            if (!prevState.equalsIgnoreCase(result)) {
+                stateReporter.reportStateChanged(userId, siteId, prevState, result, "State is changed");
+                log.info("{} State changed: '{}' => '{}'", prefix, prevState, result);
             }
             siteService.updateLastResult(siteId, String.valueOf(result));
         } catch (SchedulerException e) {

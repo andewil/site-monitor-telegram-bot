@@ -51,7 +51,7 @@ public class Starter {
         // check google
         log.info("check google...");
         SiteConnectivityChecker checker = new SiteConnectivityCheckerImpl();
-        boolean checkResult = checker.checkSite("https://google.com");
+        String checkResult = checker.checkSite("https://google.com");
         log.info(" result: {}", checkResult);
     }
 

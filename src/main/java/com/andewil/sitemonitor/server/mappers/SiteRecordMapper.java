@@ -17,6 +17,7 @@ public class SiteRecordMapper implements RowMapper<SiteRecord> {
         record.setUrl(resultSet.getString("url"));
         record.setUserId(resultSet.getObject("user_id", UUID.class));
         record.setNaturalId(resultSet.getInt("natural_id"));
+        record.setLastResult(resultSet.getString("last_result"));
         return record;
     }
 }

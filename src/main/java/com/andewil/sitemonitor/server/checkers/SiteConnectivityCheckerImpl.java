@@ -10,19 +10,21 @@ import java.net.*;
 @Slf4j
 public class SiteConnectivityCheckerImpl implements SiteConnectivityChecker {
     @Override
-    public boolean checkSite(String url) {
+    public String checkSite(String url) {
         try {
             URL checkUrl = new URL(url);
             HttpURLConnection connection = (HttpURLConnection) checkUrl.openConnection();
             connection.setInstanceFollowRedirects(true);
             connection.setConnectTimeout(10);
             int code = connection.getResponseCode();
-            if (code != 200) {
-                return false;
-            }
-            return true;
-        } catch (Exception e) {
-            throw new SiteMonitorException(e);
+            //if ((code >= 200) || (code<=299)) {
+                return String.valueOf(code);
+            //}
+            //return true;
+        } catch (MalformedURLException e) {
+            return "MalformedURLException: " + e.getMessage();
+        } catch (IOException e) {
+            return "IOException: " + e.getMessage();
         }
     }
 }

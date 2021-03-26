@@ -2,15 +2,20 @@ package com.andewil.sitemonitor.server.service;
 
 import com.andewil.sitemonitor.server.SiteMonitorException;
 import com.andewil.sitemonitor.server.mappers.SiteRecordMapper;
+import com.andewil.sitemonitor.server.models.SiteCheckRecord;
 import com.andewil.sitemonitor.server.models.SiteRecord;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.SqlTypeValue;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
+import java.sql.SQLType;
+import java.sql.Types;
 import java.util.List;
 import java.util.UUID;
 
@@ -129,5 +134,22 @@ public class SiteService {
     public boolean isLastResultChanged(int siteId, String currentValue) {
         String lastResult = getLastResult(siteId);
         return (!currentValue.equals(lastResult));
+    }
+
+    public int addCheckResult(SiteCheckRecord record) {
+        try {
+            SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(getTemplate());
+            simpleJdbcInsert.withTableName("site_check").usingGeneratedKeyColumns("check_id");
+            MapSqlParameterSource parameterSource = new MapSqlParameterSource()
+                    .addValue("site_id", record.getSiteId())
+                    .addValue("check_result", record.getCheckResult())
+                    .addValue("data", record.getCheckData())
+                    .addValue("check_date", record.getCheckTime(), Types.TIMESTAMP_WITH_TIMEZONE)
+                    ;
+            Number id = simpleJdbcInsert.executeAndReturnKey(parameterSource);
+            return id.intValue();
+        } catch (Exception e) {
+            throw new SiteMonitorException("Exception occurred when adding site check record", e);
+        }
     }
 }

@@ -32,6 +32,7 @@ public class CheckerBot extends TelegramLongPollingBot {
     public static final String DELETE_SITE_CHECK = "deletecheck";
     public static final String LIST_CHECKS = "listchecks";
     public static final String LIST_JOBS = "listjobs";
+    public static final String LAST_RESULTS = "lastresults";
 
     @Value("${tbot.username}")
     private String tbotUserName;
@@ -117,6 +118,9 @@ public class CheckerBot extends TelegramLongPollingBot {
                 break;
             case LIST_JOBS:
                 handleCmdListJobs(message, user);
+                break;
+            case LAST_RESULTS:
+                handleCmdLastResults(message, user);
                 break;
             default:
                 isKnownCommand = false;
@@ -255,13 +259,30 @@ public class CheckerBot extends TelegramLongPollingBot {
         sendMessageAsHTML(user.getChatId(), stringBuilder.toString());
     }
 
+    private void handleCmdLastResults(Message message, UserRecord user) {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("<b>Lists of sites</b>\n\n");
+        stringBuilder.append(getLastResults(user));
+        sendMessageAsHTML(user.getChatId(), stringBuilder.toString());
+    }
+
     private String getSiteCheckList(UserRecord user) {
         List<SiteRecord> listChecks = siteService.getAllForUser(user.getUserId());
         StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(" No  | int| URL\n");
         for (SiteRecord item: listChecks) {
-            stringBuilder.append(item.getNaturalId())
-                    .append(" : ")
-                    .append(item.getUrl())
+            stringBuilder.append(String.format("%1$5d | %2$3d | %3$s", item.getNaturalId(), item.getCheckInterval(), item.getUrl()))
+                    .append("\n");
+        }
+        return stringBuilder.toString();
+    }
+
+    private String getLastResults(UserRecord user) {
+        List<SiteRecord> listChecks = siteService.getAllForUser(user.getUserId());
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(" No : URL : result\n");
+        for (SiteRecord item: listChecks) {
+            stringBuilder.append(String.format("%1$5d | %2$s | %3$s", item.getNaturalId(), item.getUrl(), item.getLastResult()))
                     .append("\n");
         }
         return stringBuilder.toString();
