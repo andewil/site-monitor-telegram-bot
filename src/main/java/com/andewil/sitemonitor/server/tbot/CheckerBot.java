@@ -205,6 +205,8 @@ public class CheckerBot extends TelegramLongPollingBot {
         stringBuilder.append("<b>/addcheck</b> - add a new check\n");
         stringBuilder.append("<b>/deletecheck</b> - remove a check\n");
         stringBuilder.append("<b>/lastresults</b> - get last check results\n");
+        stringBuilder.append("\nbot by Oleg Voronin (app@andewil.com)");
+        stringBuilder.append("\nhttps://t.me/SiteMonitorBotGroup");
         sendMessageAsHTML(user.getChatId(), stringBuilder.toString());
     }
 
