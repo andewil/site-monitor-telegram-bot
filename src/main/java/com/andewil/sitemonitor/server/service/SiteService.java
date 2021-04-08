@@ -115,7 +115,7 @@ public class SiteService {
 
     public void updateLastResult(int siteId, String lastResult) {
         try {
-            String q = "update site set last_result=? where site_id=?";
+            String q = "update site set last_result=?, updated_time=now() where site_id=?";
             getTemplate().update(q, lastResult, siteId);
         } catch (Exception e) {
             throw new SiteMonitorException("Exception occurred when getLastNaturalId", e);
