@@ -14,11 +14,11 @@ public class SiteConnectivityCheckerImpl implements SiteConnectivityChecker {
             URL checkUrl = new URL(url);
             HttpURLConnection connection = (HttpURLConnection) checkUrl.openConnection();
             connection.setInstanceFollowRedirects(true);
-            connection.setConnectTimeout(10);
-            connection.setReadTimeout(30);
-            //connection.setRequestProperty("User-Agent", "Site-Monitor-Checker/1.1");
+            connection.setConnectTimeout(10000);
+            connection.setReadTimeout(30000);
+            connection.setRequestProperty("User-Agent", "Site-Monitor-Checker/1.1");
             int code = connection.getResponseCode();
-            //log.trace("{}: ContentType: {}", url, connection.getContentType());
+            log.trace("{}: ContentType: {}", url, connection.getContentType());
             return String.valueOf(code);
         } catch (MalformedURLException e) {
             return "MalformedURLException: " + e.getMessage();
