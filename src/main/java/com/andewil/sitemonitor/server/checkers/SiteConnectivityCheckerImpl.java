@@ -16,7 +16,7 @@ public class SiteConnectivityCheckerImpl implements SiteConnectivityChecker {
             connection.setInstanceFollowRedirects(true);
             connection.setConnectTimeout(10);
             connection.setReadTimeout(30);
-            connection.setRequestProperty("User-Agent", "SiteMonitorChecker/1.0");
+            connection.setRequestProperty("User-Agent", "Site-Monitor-Checker/1.1");
             log.trace("{}: ContentType: {}", url, connection.getContentType());
             int code = connection.getResponseCode();
             return String.valueOf(code);
