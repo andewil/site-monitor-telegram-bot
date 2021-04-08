@@ -16,9 +16,9 @@ public class SiteConnectivityCheckerImpl implements SiteConnectivityChecker {
             connection.setInstanceFollowRedirects(true);
             connection.setConnectTimeout(10);
             connection.setReadTimeout(30);
-            connection.setRequestProperty("User-Agent", "Site-Monitor-Checker/1.1");
+            //connection.setRequestProperty("User-Agent", "Site-Monitor-Checker/1.1");
             int code = connection.getResponseCode();
-            log.trace("{}: ContentType: {}", url, connection.getContentType());
+            //log.trace("{}: ContentType: {}", url, connection.getContentType());
             return String.valueOf(code);
         } catch (MalformedURLException e) {
             return "MalformedURLException: " + e.getMessage();
